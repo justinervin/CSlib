@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GPlusQuickstartCsharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,8 +12,14 @@ namespace CSlib
 {
     public class Global : System.Web.HttpApplication
     {
-        protected void Application_Start(object sender, EventArgs e)
+        private void Application_Start(object sender, EventArgs e)
         {
+            RegisterRoutes(RouteTable.Routes);
+        }
+
+        private void RegisterRoutes(RouteCollection routes)
+        {
+            routes.Add("catchall", new Route("{*url}", new Signin()));
         }
     }
 }
