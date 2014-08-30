@@ -1,0 +1,21 @@
+@{
+		
+    Database db = Database.Open("CSlibrary");
+	if(Request.Form["SearchText"] != null && IsPost)
+    {
+		var SearchText = Request.Form["SearchText"];
+        var selectQueryString = "SELECT CourseCode FROM Courses WHERE CourseCode LIKE @0";
+        var data = db.QueryValue(selectQueryString, SearchText);
+
+		if(data!=null)
+		{
+			Response.Redirect("Files.cshtml?course="+data);
+		}
+		else
+		{
+			Response.Redirect("Main.cshtml");
+		}		
+		
+	}
+
+}

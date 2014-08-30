@@ -84,7 +84,12 @@
             </div>
 
             <div class="collapse navbar-collapse">
-
+                <li><form method ="post" action="Search.cshtml">
+                        <li>
+                            <input class = "form-control" type ="text" id="searchbox" name ="SearchText" placeholder ="Search Course Here">
+                        </li>
+                        <li><input type ="submit" class ="glyphicon glyphicon-search"></input></li>
+                    </form></li>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="ViewCourses.cshtml">View Courses</a></li>
 
@@ -202,7 +207,7 @@
                                     @foreach (var file in recentList)
                                     {
                                         <li class="list-group-item">
-                                            <a class="btn-link" href="~/UploadedFiles/@file["Filename"]">@file["Filename"]</a>
+                                            <a class="btn-link" href="Download.cshtml?filename=@file["Filename"]" alt ="">@file["Filename"]</a>
                                             <span class="label label-success pull-right">@file["CourseCode"]</span>
                                         </li>
                                     }
