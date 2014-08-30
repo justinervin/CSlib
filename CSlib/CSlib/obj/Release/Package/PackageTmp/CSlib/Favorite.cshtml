@@ -1,0 +1,11 @@
+﻿@{
+    string idNumber = WebSecurity.CurrentUserName;
+    string courseCode = Request["courseCode"];
+    string fileId = Request["fileId"];
+
+    Database db = Database.Open("CSlib_db");
+    db.Execute("INSERT INTO FavoriteFiles (StudentId, fileId) VALUES (@0, @1)", idNumber, fileId);
+    db.Close();
+
+    Response.Redirect("~/CSlib/Files.cshtml?course=" + courseCode);
+}

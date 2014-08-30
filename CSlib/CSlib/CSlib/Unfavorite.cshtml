@@ -1,0 +1,18 @@
+﻿@{
+    string idNumber = WebSecurity.CurrentUserName;
+    string courseCode = Request["courseCode"];
+    string fileId = Request["fileId"];
+
+    Database db = Database.Open("CSlib_db");
+    db.Execute("DELETE FROM FavoriteFiles WHERE StudentId=(@0) AND FileId=(@1)", idNumber, fileId);
+    db.Close();
+
+    if (courseCode == null)
+    {
+        Response.Redirect("~/CSlib/Main.cshtml");
+    }
+    else
+    {
+        Response.Redirect("~/CSlib/Files.cshtml?course=" + courseCode);
+    }
+}

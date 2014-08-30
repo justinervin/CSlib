@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="CSlib" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\justinervin\\Documents\\Visual\ Studio\ 2013\\Projects\\CSlib\\CSlib\\obj\\Release\\Package\\PackageTmp$" />
+    <parameterEntry kind="ProviderPath" scope="setAcl" match="^C:\\Users\\justinervin\\Documents\\Visual\ Studio\ 2013\\Projects\\CSlib\\CSlib\\obj\\Release\\Package\\PackageTmp$" />
+  </parameter>
+  <parameter name="CSlib_db-Web.config Connection String" description="" value="Server=tcp:v1vvlkpx8r.database.windows.net,1433;Database=CSlib_db;User ID=cslib@v1vvlkpx8r;Password=Daniellel!;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;" tags="">
+    <parameterEntry kind="XmlFile" scope="c:\\users\\justinervin\\documents\\visual\ studio\ 2013\\Projects\\CSlib\\CSlib\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='CSlib_db']/@connectionString" />
+  </parameter>
+</parameters>

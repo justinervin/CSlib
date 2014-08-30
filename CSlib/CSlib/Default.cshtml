@@ -1,0 +1,259 @@
+﻿@using WebMatrix.WebData
+
+@{
+    // Redirect to main page if user is already logged in
+    if (WebSecurity.IsAuthenticated)
+    {
+        Response.Redirect("~/CSlib/Main.cshtml");
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>CSlibrary</title>
+
+    <!-- Bootstrap core -->
+    <link rel="stylesheet" href="Content/bootstrap.min.css" />
+
+    <!-- Custom Google Web Font -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lato:400,700" />
+
+    <!-- Animations -->
+    <link rel="stylesheet" href="Content/animations.css" />
+
+    <!-- Custom stylesheets -->
+    <link rel="stylesheet" href="Content/landing-page.css" />
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse"> -->
+                <button type="button" class="navbar-toggle" data-toggle="modal" data-target="#login-form">
+                    <span class="sr-only">Sign in</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <!-- <span class="glyphicon glyphicon-log-in"></span> -->
+                </button>
+                <a class="navbar-brand" href="Default.cshtml">CSlibrary</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-right navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="#" data-toggle="modal" data-target="#login-form">Sign in</a></li>
+                    <li><span class="navbar-text">|</span></li>
+                    <li><a href="#" data-toggle="modal" data-target="#signup-form">Get Started</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login modal -->
+    <div class="modal fade" id="login-form" tabindex="-1" role="dialog" aria-labelledby="login-modal" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" tabindex="-1">&times;</button>
+                    <h4 class="modal-title">Sign in</h4>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="Login.cshtml" role="form">
+                        <div class="form-group">
+                            <input type="text" name="loginId" id="loginId" class="form-control" placeholder="ID Number" tabindex="1" />
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="loginPassword" id="loginPassword" class="form-control" placeholder="Password" tabindex="2" />
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" id="rememberMe" name="rememberMe" value="true" tabindex="3" />
+                            <label class="checkbox" for="rememberMe">Remember me?</label>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-block" tabindex="4">Sign in</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration modal -->
+    <div class="modal fade" id="signup-form" tabindex="-1" role="dialog" aria-labelledby="signup-modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" tabindex="-1">&times;</button>
+                    <h4 class="modal-title">Get started with CSlibrary</h4>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="ThankYou.cshtml" class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="regId" class="col-sm-3 control-label">ID Number</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="regId" id="regId" class="form-control" tabindex="1" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="regEmail" class="col-sm-3 control-label">Email</label>
+                            <div class="col-sm-8">
+                                <input type="email" name="regEmail" id="regEmail" class="form-control" tabindex="2" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="regPassword" class="col-sm-3 control-label">Password</label>
+                            <div class="col-sm-8">
+                                <input type="password" name="regPassword" id="regPassword" class="form-control" tabindex="3" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword" class="col-sm-3 control-label">Confirm Password</label>
+                            <div class="col-sm-8">
+                                <input type="password" name="confirmPassword" id="confirmPassword" class="form-control" tabindex="4" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4"></div>
+                            <div class="col-sm-4">
+                                <button type="submit" value="submit" class="btn btn-success btn-block" tabindex="5">Sign up</button>
+                            </div>
+                            <div class="col-sm-4"></div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="intro-header">
+        <div class="container">
+            <div class="intro-message">
+                <h1>Your class materials in one place</h1>
+                <h4>Regain control of your college life with CSlibrary</h4>
+
+                <a href="#" class="btn btn-success btn-lg" data-toggle="modal" data-target="#signup-form" style="width: 200px;">Get Started <span class="glyphicon glyphicon-chevron-right"></span></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section-a">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-5 col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">
+                        Easy access<br />to your class materials
+                    </h2>
+                    <p class="lead">
+                        As the official file repository of the College of Computer Studies, CSlibrary lets you access all your class materials from one place. And its favoriting system makes sure ones that matter most to you are right at your fingertips. Because with CSlibrary, we don't just organize your files. We unify them.
+                    </p>
+                </div>
+                <div class="col-lg-5 col-lg-offset-2 col-sm-6">
+                    <img id="img1" class="img-responsive" src="Images/multi-platform.png" alt="" />
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-a -->
+
+    <div class="content-section-b">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">
+                        Be updated<br />
+                        with your classes
+                    </h2>
+                    <p class="lead">
+                        CSlibrary is purposefully imagined. Meticulously considered. Precision crafted. It’s not just a product of what’s technologically possible. But what’s technologically useful. It’s not just what’s next. But what should be next.
+                    </p>
+                </div>
+                <div class="col-lg-5 col-sm-pull-6  col-sm-6">
+                    <img id="img2" class="img-responsive" src="Images/notification.jpg" alt="" />
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-b -->
+
+    <div class="content-section-a">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-5 col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">
+                        Professors:<br />
+                        Track statistics on your uploads
+                    </h2>
+                    <p class="lead">
+                        CSlibrary doesn't just provide a facility for you to distribute files to your students. It also lets see statistics on activities related to your files. Track which of your files are most downloaded by students and see which ones matter the most to them.
+                    </p>
+                </div>
+                <div class="col-lg-5 col-lg-offset-2 col-sm-6">
+                    <img id="img3" class="img-responsive" src="Images/statistics.png" alt="" />
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-a -->
+
+    <div class="banner">
+
+        <div class="container">
+            <ul class="list-inline banner-social-buttons">
+                <li>
+                    <a href="#" class="btn btn-success btn-lg" data-toggle="modal" data-target="#login-form" style="width: 200px;">Sign in <span class="glyphicon glyphicon-log-in"></span></a>
+                </li>
+                <li>
+                    <a href="#" class="btn btn-success btn-lg" data-toggle="modal" data-target="#signup-form" style="width: 200px;">Get Started <span class="glyphicon glyphicon-chevron-right"></span></a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.banner -->
+
+    <footer>
+        <div class="container">
+            <p class="copyright text-muted small">Copyright &copy; 2014 WEBAPPS Buddies. All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="Scripts/jquery-2.1.0.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+    <script src="Scripts/LandingPage.js"></script>
+</body>
+
+</html>

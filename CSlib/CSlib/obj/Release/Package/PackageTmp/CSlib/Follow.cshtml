@@ -1,0 +1,10 @@
+﻿@{
+    string idNumber = WebSecurity.CurrentUserName;
+    string courseCode = Request["courseCode"];
+
+    Database db = Database.Open("CSlib_db");
+    db.Execute("INSERT INTO FollowedCourses (StudentId, CourseCode) VALUES (@0, @1)", idNumber, courseCode);
+    db.Close();
+
+    Response.Redirect("~/CSlib/ViewCourses.cshtml");
+}

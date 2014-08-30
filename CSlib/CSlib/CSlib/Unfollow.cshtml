@@ -1,0 +1,10 @@
+﻿@{
+    string idNumber = WebSecurity.CurrentUserName;
+    string courseCode = Request["courseCode"];
+
+    Database db = Database.Open("CSlib_db");
+    db.Execute("DELETE FROM FollowedCourses WHERE StudentId=(@0) AND CourseCode=(@1)", idNumber, courseCode);
+    db.Close();
+
+    Response.Redirect("~/CSlib/ViewCourses.cshtml");
+}

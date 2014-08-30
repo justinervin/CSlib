@@ -1,0 +1,31 @@
+﻿@using WebMatrix.WebData
+
+@{
+    string courseCode = Request["courseCode"];
+    string fileId = Request["fileId"];
+    string filename = "";
+
+    Database db = Database.Open("CSlib_db");
+
+    var file = db.QuerySingle("SELECT * FROM Files WHERE ID=(@0)", fileId);
+
+    filename = file["Filename"];
+    var fullPath = Server.MapPath("~/UploadedFiles/" + filename);
+    if (File.Exists(fullPath))
+    {
+        File.Delete(fullPath);
+    }
+
+    db.Execute("DELETE FROM Files WHERE ID=(@0)", fileId);
+    db.Close();
+
+    if (courseCode == null)
+    {
+        Response.Redirect("~/CSlib/Main.cshtml");
+    }
+    else
+    {
+        Response.Redirect("~/CSlib/Files.cshtml?course=" + courseCode);
+    }
+
+}

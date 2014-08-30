@@ -1,0 +1,112 @@
+﻿@{
+    string idNumber = "";
+    string emailAddress = "";
+    string password = "";
+
+    if (IsPost)
+    {
+        // TODO: Validate user
+
+        idNumber = Request.Form["regId"];
+        emailAddress = Request.Form["regEmail"];
+        password = Request.Form["regPassword"];
+
+        // Insert a new user into the database
+        var db = Database.Open("CSlib_db");
+
+        // Check if user already exists
+        var user = db.QuerySingle("SELECT idNumber FROM Users WHERE idNumber = (@0)", idNumber);
+
+        if (user == null)
+        {
+            bool isStudent = true;
+            if (idNumber.Contains("970"))
+            {
+                isStudent = false;
+            }
+
+            db.Execute("INSERT INTO Users (idNumber, Email, isStudent) VALUES (@0, @1, @2)", idNumber, emailAddress, isStudent);
+
+            // Create and associate a new entry in the membership database.
+            // If successful, continue processing the request
+            var token = WebSecurity.CreateAccount(idNumber, password, false);
+
+            // Automatically log in the user
+            WebSecurity.Login(idNumber, password);
+        }
+
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>CSlibrary - Registration successful!</title>
+
+    <!-- Bootstrap core -->
+    <link rel="stylesheet" href="Content/bootstrap.min.css" />
+
+    <!-- Custom Google Web Font -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lato:400,700" />
+
+    <!-- Animations -->
+    <link rel="stylesheet" href="Content/animations.css" />
+
+    <!-- Custom stylesheets -->
+    <link rel="stylesheet" href="Content/landing-page.css" />
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">CSlibrary</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <div class="starter-template">
+            @{
+                if (IsPost)
+                {
+                    @:<h1>Thanks for signing up!</h1>
+                    @:<p class="lead">
+                        @:    We have created and activated your account.<br />
+                        @:    Click <a href="Default.cshtml">here</a> to go back to the main page.
+                        @:
+                    @:</p>
+                }
+                else
+                {
+                    @:<h1>403</h1>
+                    @:<p class="lead">What are you doing here?</p>
+                }
+            }
+
+        </div>
+
+    </div><!-- /.container -->
+
+    <footer>
+        <div class="container">
+            <p class="copyright text-muted small">Copyright &copy; 2014 WEBAPPS Buddies. All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="Scripts/jquery-2.1.0.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+</body>
+</html>

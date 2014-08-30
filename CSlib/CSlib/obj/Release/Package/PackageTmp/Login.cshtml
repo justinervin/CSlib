@@ -1,0 +1,102 @@
+﻿@{
+    // Initialize general page variables
+    var idNumber = "";
+    var password = "";
+    var rememberMe = false;
+
+    var returnUrl = Request.QueryString["ReturnUrl"];
+    if (returnUrl.IsEmpty())
+    {
+        // Some external login providers always require a return URL value
+        returnUrl = Href("~/");
+    }
+
+    if (IsPost)
+    {
+        idNumber = Request.Form["loginId"];
+        password = Request.Form["loginPassword"];
+        rememberMe = Request.Form["rememberMe"].AsBool();
+
+        if (WebSecurity.Login(idNumber, password, rememberMe))
+        {
+            Context.RedirectLocal(returnUrl);
+            return;
+        }
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>CSlibrary - Log in to CSlibrary</title>
+
+    <!-- Bootstrap core -->
+    <link rel="stylesheet" href="Content/bootstrap.min.css" />
+
+    <!-- Custom Google Web Font -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lato:400,700" />
+
+    <!-- Animations -->
+    <link rel="stylesheet" href="Content/animations.css" />
+
+    <!-- Custom stylesheets -->
+    <link rel="stylesheet" href="Content/landing-page.css" />
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="~/Default.cshtml">CSlibrary</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <div class="starter-template">
+
+            @if (IsPost)
+            {
+                @:<div class="alert alert-danger"><b>Login failed!</b> Invalid username/password combination.</div>
+            }
+
+            <div class="login-template">
+                <form method="post" action="Login.cshtml" role="form">
+                    <div class="form-group">
+                        <input type="text" name="loginId" id="loginId" class="form-control" placeholder="ID Number" tabindex="1" />
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="loginPassword" id="loginPassword" class="form-control" placeholder="Password" tabindex="2" />
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="rememberMe" name="rememberMe" value="false" checked="@rememberMe" tabindex="3" />
+                        <label class="checkbox" for="rememberMe">Remember me?</label>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block" tabindex="4">Sign in</button>
+                </form>
+            </div>
+        </div>
+
+    </div><!-- /.container -->
+
+    <footer>
+        <div class="container">
+            <p class="copyright text-muted small">Copyright &copy; 2014 WEBAPPS Buddies. All Rights Reserved</p>
+        </div>
+    </footer>
+    <!-- JavaScript -->
+    <script src="Scripts/jquery-2.1.0.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+</body>
+</html>

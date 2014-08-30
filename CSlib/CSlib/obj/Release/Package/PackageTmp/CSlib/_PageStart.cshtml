@@ -1,0 +1,8 @@
+﻿@using WebMatrix.WebData
+
+@{
+    if (!WebSecurity.IsAuthenticated)
+    {
+        Response.Redirect("~/Login.cshtml");
+    }
+}
