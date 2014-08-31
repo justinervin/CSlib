@@ -1,0 +1,23 @@
+﻿@{
+   		
+    Database db = Database.Open("CSlib_db");
+    if (Request.Form["SearchText"] != null && IsPost)
+    {
+        var SearchText = Request.Form["SearchText"];
+        var selectQueryString1 = "SELECT Filename FROM Files WHERE Filename LIKE @0";
+        var data1 = db.QueryValue(selectQueryString1, SearchText);
+        if (data1 != null)
+        {
+            Response.Redirect("FilesinCourse.cshtml?course=" + data1);
+        }
+
+
+        else
+        {
+            Response.Redirect("Main.cshtml");
+        }
+
+    }
+
+}
+

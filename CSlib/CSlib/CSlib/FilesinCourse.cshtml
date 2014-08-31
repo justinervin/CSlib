@@ -7,20 +7,39 @@
                               WebSecurity.CurrentUserName);
 
     string name = user["Name"];
+    string courseCode = Request["course"];
+    string file = Request.Form["SearchText"];
+
+    if (file.Equals(""))
+    {
+        Response.Redirect("ViewCourses.cshtml");
+    }
+
     bool isStudent = user["isStudent"];
+
+    if (name.Equals("Unknown"))
+    {
+        // First login. Redirect to edit profile page.
+        Response.Redirect("EditProfile.cshtml?firstlogin=true");
+    }
 
     var followedCourses = db.Query(@"SELECT CourseCode FROM FollowedCourses
                                    WHERE LOWER(StudentId) = LOWER(@0)
                                    ORDER BY CourseCode", WebSecurity.CurrentUserName);
 
-    var courseList = db.Query(@"SELECT Courses.CourseCode, DerivedFollowedCourses.StudentId
-                                FROM Courses
-                                LEFT OUTER JOIN (
-                                    SELECT * FROM FollowedCourses
-                                    WHERE StudentId=(@0)) DerivedFollowedCourses
-                                ON Courses.CourseCode=DerivedFollowedCourses.CourseCode
-                                ORDER BY DerivedFollowedCourses.StudentId DESC, Courses.CourseCode ASC", idNumber);
-                                                                                                        
+
+    var fileList = db.Query(@"SELECT Files.ID, Files.Filename, Files.DateUploaded, FavoriteFiles.StudentId
+                                FROM Files
+                                LEFT OUTER JOIN FavoriteFiles
+                                ON Files.ID=FavoriteFiles.FileId
+                                WHERE Files.CourseCode=(@0)
+                                ORDER BY Files.Filename", courseCode);
+
+
+    var fileInCourse = db.Query(@"SELECT Files.Filename
+                                FROM Files,
+                                WHERE Files.CourseCode=(@0)
+                                ORDER BY Files.Filename", courseCode);
 
     db.Close();
 }
@@ -31,7 +50,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>CSlibrary - View Courses</title>
+    <title>CSlibrary</title>
 
     <!-- Bootstrap core -->
     <link rel="stylesheet" href="~/Content/bootstrap.min.css" />
@@ -65,13 +84,14 @@
                     <li>
                         <form method="post" action="Search.cshtml">
 
-                            <input class="form-control" type="text" id="searchbox" name="SearchText" placeholder="Search Files Here">
+                            <input class="form-control" type="text" id="searchbox" name="SearchText" placeholder="Search Course Here">
 
                             <input type="submit" class="glyphicon glyphicon-search">
 
                         </form>
                     </li>
                     <li><a href="ViewCourses.cshtml">View Courses</a></li>
+
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">@name</a>
                         <ul class="dropdown-menu">
@@ -118,11 +138,11 @@
                     else
                     {
                         <ul class="nav nav-pills nav-stacked">
-                            @foreach (var course in followedCourses)
+                            @foreach (var filecourse in fileInCourse)
                             {
                                 <li>
-                                    <a href="Files.cshtml?course=@course["CourseCode"]">
-                                        @course["CourseCode"] <span class="label label-success pull-right"></span>
+                                    <a href="Files.cshtml?course=@filecourse["Filename"]">
+                                        @filecourse["Filename"] <span class="label label-success pull-right"></span>
                                     </a>
                                 </li>
                             }
@@ -137,60 +157,60 @@
                     <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
                 </p>
 
-                <div class="panel panel-default">
-                    <div class="panel-heading">Course List</div>
-                    <table class="table table-hover">
-                        <thead>
+                <ol class="breadcrumb">
+                    <li><a href="Main.cshtml">CSlibrary</a></li>
+                    @{
+                        if (!courseCode.Equals(""))
+                        {
+                            @:
+                            <li class="active"><a href="Files.cshtml?course=@courseCode">@courseCode</a></li>
+                        }
+                    }
+                </ol>
+
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th width="50"></th>
+                            <th width="400">Name</th>
+                            <th></th>
+                            <th>Time Uploaded</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (fileList.Count() == 0)
+                        {
+                            <tr><td></td><td>No files found for this course!</td></tr>
+                        }
+                        @foreach (var file in fileList)
+                        {
                             <tr>
-                                <th width="50"></th>
-                                <th width="400">Course Code</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var courseCode in courseList)
-                            {
-                                <tr>
-                                    <td width="50"></td>
-                                    <td><a class="btn-link" href="Files.cshtml?course=@courseCode["CourseCode"]">@courseCode["CourseCode"]</a></td>
-                                    @if (!idNumber.Equals(@courseCode["StudentId"]))
+                                <td></td>
+                                <td><a class="btn-link" href="~/UploadedFiles/@file["Filename"]">@file["Filename"]</a></td>
+                                <td></td>
+                                <td>
+                                    @file["DateUploaded"]
+                                    @if (isStudent)
                                     {
-                                        <td>
-                                            <a href="Follow.cshtml?courseCode=@courseCode["CourseCode"]" class="btn btn-default pull-right">
-                                                @if (isStudent)
-                                                {
-                                                    @:Follow
-                                            }
-                                                else
-                                                {
-                                                    @:Add to my courses
-                                            }
-                                            </a>
-                                        </td>
+                                        if (idNumber.Equals(file["StudentId"]))
+                                        {
+                                            <a class="btn btn-success btn-xs pull-right" href="Unfavorite.cshtml?courseCode=@courseCode&fileId=@file["ID"]"><span class="glyphicon glyphicon-star"></span></a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-default btn-xs pull-right" href="Favorite.cshtml?courseCode=@courseCode&fileId=@file["ID"]"><span class="glyphicon glyphicon-star"></span></a>
+                                        }
                                     }
                                     else
                                     {
-                                        <td>
-                                            <a href="Unfollow.cshtml?courseCode=@courseCode["CourseCode"]" class="btn btn-success pull-right">
-                                                @if (isStudent)
-                                                {
-                                                    @:Unfollow
-                                            }
-                                                else
-                                                {
-                                                    @:Remove from my courses
-                                            }
-                                            </a>
-                                        </td>
+                                        <a class="btn btn-danger btn-xs pull-right" href="DeleteFile.cshtml?courseCode=@courseCode&fileId=@file["ID"]"><span class="glyphicon glyphicon-remove"></span></a>
                                     }
 
-                                    <td></td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div><!--/span-->
         </div><!--/row-->
         <hr>
