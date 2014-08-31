@@ -84,14 +84,17 @@
             </div>
 
             <div class="collapse navbar-collapse">
-                <li><form method ="post" action="Search.cshtml">
-                        <li>
-                            <input class = "form-control" type ="text" id="searchbox" name ="SearchText" placeholder ="Search Course Here">
-                        </li>
-                        <li><input type ="submit" class ="glyphicon glyphicon-search"></input></li>
-                    </form></li>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="ViewCourses.cshtml">View Courses</a></li>
+                    <li>
+                    <form method="post" action="Search.cshtml">
+                   
+                    <input class="form-control" type="text" id="searchbox" name="SearchText" placeholder="Search Course Here">
+                    
+                       <input type="submit" class="glyphicon glyphicon-search">
+                   
+                    </form>
+                        </li>
+                        <li><a href="ViewCourses.cshtml">View Courses</a></li>
 
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">@name</a>
