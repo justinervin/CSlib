@@ -1,4 +1,11 @@
 ﻿@{
     WebSecurity.Logout();
+    string idNumber = Request["idNumber"];
+
+    Database db = Database.Open("CSlib_db");
+    db.Execute("INSERT INTO Users (lastlogin) VALUES ("+DateTime.Now+")");
+    db.Close();
+
+    
     Response.Redirect("~/Default.cshtml");
 }
