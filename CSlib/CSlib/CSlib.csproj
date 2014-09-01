@@ -246,6 +246,9 @@
     <Content Include="CSlib\Search.cshtml" />
     <Content Include="CSlib\SearchFile.cshtml" />
     <Content Include="CSlib\FilesinCourse.cshtml" />
+    <None Include="Properties\PublishProfiles\CSlib %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\CSlib %283%29.pubxml" />
+    <None Include="Properties\PublishProfiles\CSlib %284%29.pubxml" />
     <None Include="Properties\PublishProfiles\CSlib.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\ai.js" />

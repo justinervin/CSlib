@@ -148,6 +148,5 @@ C:\Users\Joyce\Documents\GitHub\CSlib\CSlib\CSlib\bin\WebMatrix.Data.xml
 C:\Users\Joyce\Documents\GitHub\CSlib\CSlib\CSlib\bin\WebMatrix.WebData.xml
 C:\Users\Joyce\Documents\GitHub\CSlib\CSlib\CSlib\bin\Zlib.Portable.pdb
 C:\Users\Joyce\Documents\GitHub\CSlib\CSlib\CSlib\obj\Debug\CSlib.csproj.App.config
-C:\Users\Joyce\Documents\GitHub\CSlib\CSlib\CSlib\obj\Debug\CSlib.csprojResolveAssemblyReference.cache
 C:\Users\Joyce\Documents\GitHub\CSlib\CSlib\CSlib\obj\Debug\CSlib.dll
 C:\Users\Joyce\Documents\GitHub\CSlib\CSlib\CSlib\obj\Debug\CSlib.pdb

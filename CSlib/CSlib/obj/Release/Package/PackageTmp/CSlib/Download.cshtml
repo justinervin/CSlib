@@ -1,0 +1,21 @@
+@{
+    if(!Request["filename"].IsEmpty()){
+		
+        var filename = Request["filename"];
+
+		Response.Buffer = true;
+		Response.Clear();
+		Response.ContentType = "text/plain";
+        Response.AppendHeader("Content-Disposition", "attachment; filename=" + filename);
+		//Response.BinaryWrite((byte[])filename.FileContent);
+		Response.WriteFile("~/UploadedFiles/" + filename);
+		Response.End();
+
+		  //Response.Buffer = true;
+		  //Response.Clear();
+		  //Response.AddHeader("content-disposition", "filename=" + filename);
+		  //Response.ContentType = "octet/stream";
+		  //Response.WriteFile("~/UploadedFiles/" + filename);
+	}
+
+}

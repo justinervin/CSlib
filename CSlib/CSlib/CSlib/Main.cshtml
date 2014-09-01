@@ -31,24 +31,25 @@
     var recentList = db.Query(@"SELECT Files.ID, Files.Filename, Files.CourseCode
                               FROM Files
                               ORDER BY Files.DateUploaded DESC");
-                                                               
-                                                               
-    var lastLogin = db.QuerySingle(@"SELECT lastlogin
-                                FROM Users" , idNumber);
- 
-        
+
+
+    var lLogin = db.QuerySingle(@"SELECT lastlogin
+                                FROM Users", idNumber);
+
+    string lastlogin = lLogin["lastlogin"];
+
+
     var newFile = db.Query(@"SELECT Files.ID, Files.Filename, Files.DateUploaded, FollowedCourses.StudentId
-                                FROM Files, FollowedCourses
-                               WHERE FollowedCourses.StudentId=(@0)AND Files.DateUploaded>= " +lastLogin + "", idNumber);
+                            FROM Files, FollowedCourses
+                            WHERE FollowedCourses.StudentId=(@0)AND Files.DateUploaded>=(@1)", idNumber, lastlogin);                       
     var fileName = "";
 
     var fileSavePath = "";
     if (IsPost)
     {
-    
-        
+   
         var uploadedFile = Request.Files[0];
-        fileName = Path.GetFileName(uploadedFile.FileName);
+       fileName = Path.GetFileName(uploadedFile.FileName);
         fileSavePath = Server.MapPath("~/UploadedFiles/" + fileName);
         uploadedFile.SaveAs(fileSavePath);
         db.Execute("INSERT INTO Files (Filename, DateUploaded, UploadedBy, CourseCode) VALUES (@0, @1, @2, @3)",
@@ -94,32 +95,22 @@
             <div class="navbar-header">
                 <a class="navbar-brand" href="Main.cshtml">CSlibrary</a>
             </div>
-
             <div class="collapse navbar-collapse">
+
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                    <form method="post" action="Search.cshtml">
-                   
-                    <input class="form-control" type="text" id="searchbox" name="SearchText" placeholder="Search Course Here">
-                    
-                       <input type="submit" class="glyphicon glyphicon-search">
-                   
-                    </form>
-                        </li>
-                        <li><a href="ViewCourses.cshtml">View Courses</a></li>
+                        <form method="post" action="Search.cshtml">
 
+                            <input class="form-control" type="text" id="searchbox" name="SearchText" placeholder="Search Courses Here">
+
+                         
+
+                        </form>
+                    </li>
+                    <li><a href="ViewCourses.cshtml">View Courses</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">@name</a>
                         <ul class="dropdown-menu">
-                            if(@newFile!=null){
-                            @foreach (var file in newFile)
-                            {
-
-                                <li><a href="#">@file["Filename"]</a></li>
-
-                            }
-
-                            }}
                             <li><a href="EditProfile.cshtml">Edit settings</a></li>
                             <li class="divider"></li>
                             <li><a href="~/Logout.cshtml">Log out</a></li>
@@ -131,11 +122,16 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-bell"></span></a>
                             <ul class="dropdown-menu">
-                                
+                                @foreach (var file in newFile)
+                                {
+                                    if (@file["Filename"] != null)
+                                    {<li><a href="#">@file["Filename"]</a></li>}
+                                }
                                
                             </ul>
                         </li>
                     }
+
                 </ul>
             </div>
         </div>
@@ -233,7 +229,7 @@
                                     @foreach (var file in recentList)
                                     {
                                         <li class="list-group-item">
-                                            <a class="btn-link" href="Download.cshtml?filename=@file["Filename"]" alt ="">@file["Filename"]</a>
+                                            <a class="btn-link" href="Download.cshtml?filename=@file["Filename"]" alt="">@file["Filename"]</a>
                                             <span class="label label-success pull-right">@file["CourseCode"]</span>
                                         </li>
                                     }
@@ -265,7 +261,7 @@
                             </div>
 
                             <div class="form-group">
-                                <input class="btn btn-success" type="submit" value="Upload" />
+                                <input class="btn btn-success" type="submit" value="Upload" onclick="" />
                             </div>
                         </form>
 
@@ -276,7 +272,7 @@
                     }
 
                 }
-
+                
 
             </div><!--/span-->
         </div><!--/row-->
